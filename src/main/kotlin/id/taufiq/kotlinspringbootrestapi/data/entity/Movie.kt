@@ -1,4 +1,4 @@
-package id.taufiq.kotlinspringbootrestapi.entity
+package id.taufiq.kotlinspringbootrestapi.data.entity
 
 import org.hibernate.Hibernate
 import javax.persistence.*
@@ -6,12 +6,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "movie")
 data class Movie(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: String,
-
     val title: String,
-
     val description: String,
 
     @ElementCollection
@@ -19,6 +14,10 @@ data class Movie(
     @Column(name = "genre", length = 25)
     val genre: MutableList<String> = mutableListOf()
 ) {
+    @Id
+    @Column(name = "id", nullable = false, length = 25)
+    var id: String? = null
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
