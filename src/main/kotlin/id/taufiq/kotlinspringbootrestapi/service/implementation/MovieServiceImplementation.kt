@@ -3,8 +3,6 @@ package id.taufiq.kotlinspringbootrestapi.service.implementation
 import id.taufiq.kotlinspringbootrestapi.data.entity.Movie
 import id.taufiq.kotlinspringbootrestapi.repository.MovieRepository
 import id.taufiq.kotlinspringbootrestapi.service.MovieService
-import id.taufiq.kotlinspringbootrestapi.util.error.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,11 +11,11 @@ class MovieServiceImplementation(val repository: MovieRepository) : MovieService
         return repository.save(movie)
     }
 
-    override fun get(id: String): Movie {
+    override fun get(id: Long): Movie {
         return findByIdOrThrowException(id)
     }
 
-    override fun update(id: String, movie: Movie): Movie {
+    override fun update(id: Long, movie: Movie): Movie {
         val currentMovie = findByIdOrThrowException(id)
 
         currentMovie.title = movie.title
@@ -27,11 +25,16 @@ class MovieServiceImplementation(val repository: MovieRepository) : MovieService
         return repository.save(currentMovie)
     }
 
-    override fun delete() {
-        //
+    override fun delete(id: Long): Long {
+        if (!repository.existsById(id)) {
+            throw IllegalArgumentException("Invalid Id:$id")
+        }
+        repository.deleteById(id)
+        return id
     }
 
-    fun findByIdOrThrowException(id: String): Movie {
-        return repository.findByIdOrNull(id) ?: throw NotFoundException()
+    fun findByIdOrThrowException(id: Long): Movie {
+        return repository.findById(id)
+            .orElseThrow { IllegalArgumentException("Invalid Id:$id") }
     }
 }

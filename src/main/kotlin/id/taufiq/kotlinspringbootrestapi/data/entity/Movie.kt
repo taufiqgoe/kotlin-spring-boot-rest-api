@@ -6,18 +6,22 @@ import javax.persistence.*
 @Entity
 @Table(name = "movie")
 data class Movie(
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
+    var id: Long? = 0,
+
     var title: String,
+
     var description: String,
 
     @ElementCollection
     @CollectionTable(name = "genre")
     @Column(name = "genre", length = 25)
     var genre: MutableList<String> = mutableListOf()
-) {
-    @Id
-    @Column(name = "id", nullable = false, length = 25)
-    var id: String? = null
 
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
