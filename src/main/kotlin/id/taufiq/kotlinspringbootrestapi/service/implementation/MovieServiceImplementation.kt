@@ -17,8 +17,14 @@ class MovieServiceImplementation(val repository: MovieRepository) : MovieService
         return findByIdOrThrowException(id)
     }
 
-    override fun update() {
-        //
+    override fun update(id: String, movie: Movie): Movie {
+        val currentMovie = findByIdOrThrowException(id)
+
+        currentMovie.title = movie.title
+        currentMovie.description = movie.description
+        currentMovie.genre = movie.genre
+
+        return repository.save(currentMovie)
     }
 
     override fun delete() {

@@ -6,13 +6,13 @@ import javax.persistence.*
 @Entity
 @Table(name = "movie")
 data class Movie(
-    val title: String,
-    val description: String,
+    var title: String,
+    var description: String,
 
     @ElementCollection
     @CollectionTable(name = "genre")
     @Column(name = "genre", length = 25)
-    val genre: MutableList<String> = mutableListOf()
+    var genre: MutableList<String> = mutableListOf()
 ) {
     @Id
     @Column(name = "id", nullable = false, length = 25)
